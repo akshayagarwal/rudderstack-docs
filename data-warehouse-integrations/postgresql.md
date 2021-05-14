@@ -18,20 +18,33 @@ Please check our [Warehouse Schemas](https://docs.rudderstack.com/data-warehouse
 
 ## Setting PostgreSQL User Permissions
 
-After setting up your PostgreSQL database, create a user. You should also assign privileges to the created user in order to create schemas and temporary tables on the specified database.
+After setting up your PostgreSQL database, create a user. You should also assign privileges to the created user in order to create schemas and tables on the specified database.
 
 Below are the SQL queries that let you create a user, and grant the above-mentioned privileges to that created user:
 
-```text
-CREATE USER <user name> WITH PASSWORD '<enter password here>';
+* Create user
 
--- grants the above created user to create new schemas and temporary tables on the specified database.
-GRANT CREATE, TEMPORARY ON DATABASE <enter database name here> TO <user name>;
+```text
+CREATE USER RUDDER WITH PASSWORD 'strong_unique_password';
 ```
 
-{% hint style="warning" %}
-If you don't grant the `CREATE, TEMPORARY` privileges the events don't get exported to PostgreSQL.
-{% endhint %}
+* Grant usage on schema
+
+```text
+GRANT USAGE ON SCHEMA "testschema" TO RUDDER;
+```
+
+* Grant select on table
+
+```text
+GRANT SELECT ON TABLE "testschema"."testtable" to RUDDER;
+```
+
+* Grant create on schema
+
+```text
+GRANT CREATE ON SCHEMA "testschema" to RUDDER;
+```
 
 ## Setting Up the Network Access
 
