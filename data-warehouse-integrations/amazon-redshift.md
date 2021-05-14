@@ -84,13 +84,11 @@ The  username and password we provided earlier while creating the Redshift clust
 * The queries to create a new user are:
 
 ```text
--- create a user named "RUDDER" RudderStack can use to access Redshift
-CREATE USER RUDDER WITH PASSWORD 'strong_unique_password'
+-- create a user named "rudder" RudderStack can use to access Redshift
+CREATE USER rudder PASSWORD '<password goes here>'; 
 
--- granting schema creation permission to the "RUDDER" user
-GRANT USAGE ON SCHEMA "testschema" TO RUDDER;
-GRANT SELECT ON TABLE "testschema"."testtable" to RUDDER;
-GRANT CREATE ON SCHEMA "testschema" to RUDDER;
+-- granting schema creation permission to the "rudder" user on the database you chose earlier
+GRANT CREATE ON DATABASE "<database name goes here>" TO "rudder";
 ```
 
 * Log into the Redshift cluster with the newly created user credentials.

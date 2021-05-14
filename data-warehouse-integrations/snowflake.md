@@ -35,7 +35,7 @@ You can set your data warehouse size as per your future data volume.
 Alternatively, you can also use SQL to create a warehouse, as shown:
 
 ```text
-CREATE WAREHOUSE RUDDER_WAREHOUSE
+CREATE WAREHOUSE "RUDDER_WAREHOUSE"
   WITH WAREHOUSE_SIZE = 'XSMALL'
     WAREHOUSE_TYPE = 'STANDARD'
     AUTO_SUSPEND = 600
@@ -59,49 +59,47 @@ The following screenshot demonstrates the **Create Database** option in Snowflak
 Alternatively, you can also use SQL to create a database, as shown:
 
 ```text
-CREATE DATABASE RUDDER_EVENTS;
+CREATE DATABASE "RUDDER_EVENTS";
 ```
 
 ### Creating a Role for RudderStack
 
 Please execute the following SQL commands to create a new role with the required permissions to load your data into the warehouse:
 
-* Create a new role and then verify it was added
+* Create a new role
 
 ```text
-CREATE ROLE RUDDER_ROLE;
-SHOW ROLES
-```
-
-* Create a new user and then verify it was added
-
-```text
-CREATE OR REPLACE USER RUDDER_USER PASSWORD = 'strong_unique_password' DEFAULT_ROLE = 'RUDDER_ROLE';
-SHOW USERS;
-```
-Alternatively, you can create a user as shown below:
-
-![Creating a user in Snowflake](../.gitbook/assets/screenshot-2020-02-27-at-5.34.41-pm.png)
-
-* Grant role to user
-
-```text
-GRANT ROLE RUDDER_ROLE TO USER RUDDER_USER;
+CREATE ROLE "RUDDER";
 ```
 
 * Grant access to the virtual warehouse
 
 ```text
-GRANT USAGE ON WAREHOUSE RUDDER_WAREHOUSE TO ROLE RUDDER_ROLE;
+GRANT USAGE ON WAREHOUSE "RUDDER_WAREHOUSE" TO ROLE "RUDDER";
 ```
 
 * Grant access to the database
 
 ```text
-GRANT USAGE ON DATABASE RUDDER_EVENTS TO ROLE RUDDER_ROLE; 
-GRANT USAGE ON SCHEMA RUDDER_EVENTS.TESTSCHEMA TO ROLE RUDDER_ROLE;
-GRANT CREATE TABLE ON SCHEMA RUDDER_EVENTS.TESTSCHEMA TO ROLE RUDDER_ROLE;
-GRANT SELECT ON TABLE RUDDER_EVENTS.TESTSCHEMA.TESTTABLE TO ROLE RUDDER_ROLE;
+GRANT USAGE ON DATABASE "RUDDER_EVENTS" TO ROLE "RUDDER";
+GRANT CREATE SCHEMA ON DATABASE "RUDDER_EVENTS" TO ROLE "RUDDER";
+GRANT ALL ON ALL SCHEMAS IN DATABASE "RUDDER_EVENTS" TO ROLE "RUDDER";
+```
+
+### Creating a User
+
+Finally, please create a user to connect RudderStack to the previously created Snowflake warehouse, as shown:
+
+![Creating a user in Snowflake](../.gitbook/assets/screenshot-2020-02-27-at-5.34.41-pm.png)
+
+Alternatively, you can use SQL to create a user in Snowflake, as shown:
+
+```text
+CREATE USER "RUDDER_USER"
+  MUST_CHANGE_PASSWORD = FALSE
+  DEFAULT_ROLE = "RUDDER"
+  PASSWORD = "strong_unique_password";  
+GRANT ROLE "RUDDER" TO USER "RUDDER_USER";
 ```
 
 ## Configuring Snowflake in RudderStack
